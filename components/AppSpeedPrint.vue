@@ -1,0 +1,1 @@
+<template>Я компонент</template>

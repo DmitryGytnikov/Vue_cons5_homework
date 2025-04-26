@@ -1,0 +1,11 @@
+body {
+	margin: 0;
+}
+
+.el-popconfirm__action .el-button:hover,
+.el-popconfirm__action .el-button:focus,
+.el-popconfirm__action .el-button:active {
+	border: 2px solid #409eff;
+	background-color: #409eff;
+	color: #f3ffff;
+}
