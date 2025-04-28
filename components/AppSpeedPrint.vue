@@ -1,4 +1,6 @@
 <script setup>
+import "./assets/css/index.css"
+
 // const fact = ref("")
 // fetchedText
 const fetchedText = ref("")
@@ -9,7 +11,7 @@ const text = ref("")
 const typedText = ref("")
 
 // state?: 'initial' | 'correct' | 'wrong'
-const fallbackText = [
+const fallbackTextАrray = [
 	{
 		letter: "H",
 		state: "correct",
@@ -72,6 +74,8 @@ const fallbackText = [
 	},
 ]
 
+const isModalActive = ref(false)
+
 const fetchData = () => {
 	fetch("https://api.api-ninjas.com/v1/quotes", {
 		method: "GET",
@@ -89,7 +93,7 @@ const fetchData = () => {
 						letter: elem,
 						state: "initial",
 					}
-				}) // преобразование в массив обьектов
+				}) // преобразование в массив обьектов посимвольно
 				// console.log(resultMidterm2)
 
 				fetchedTextАrray.value = resultMidterm2
@@ -103,9 +107,9 @@ const fetchData = () => {
 
 const getText = () => {
 	if (!fetchedText.value) {
-		fetchedTextАrray.value = fallbackText
+		fetchedTextАrray.value = fallbackTextАrray
 
-		const resultMidterm3 = fallbackText.map(function (elem) {
+		const resultMidterm3 = fallbackTextАrray.map(function (elem) {
 			return elem.letter
 		}) // ['h', 'e', 'l', 'l', 'o'];
 		// console.log(resultMidterm3)
@@ -118,57 +122,139 @@ const getText = () => {
 }
 
 getText()
+
+let inSecondsDisplay = ref(0)
+
+const runCountdownClock = () => {
+	// countdown clock VVV
+
+	// Set the date we're counting down to
+	const countDownInSecond = 6
+	const countDownDate = new Date(
+		Date.parse(new Date()) + countDownInSecond * 1000
+	)
+
+	// Update the count down every 1 second
+	const x = setInterval(function () {
+		// Get today's date and time
+		const now = new Date().getTime()
+
+		// Find the distance between now and the count down date
+		const distance = countDownDate - now
+
+		// Time calculations for days, hours, minutes and seconds
+		// const days = Math.floor(distance / (1000 * 60 * 60 * 24))
+		// const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+		// const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
+		// const seconds = Math.floor((distance % (1000 * 60)) / 1000)
+		const seconds = Math.floor((distance % (1000 * 60)) / 1000)
+		// console.log(seconds)
+
+		// Output the result in an element
+		inSecondsDisplay.value = seconds
+
+		// with id="demo"
+		// document.getElementById("demo").innerHTML =
+		// 	days + "d " + hours + "h " + minutes + "m " + seconds + "s "
+
+		// If the count down is over, write some text
+		if (distance < 0) {
+			clearInterval(x)
+			inSecondsDisplay.value = 0
+			isModalActive.value = true
+			// document.getElementById("demo").innerHTML = "EXPIRED"
+		}
+	}, 1000)
+
+	// countdown clock ^^^
+}
+
+const restartCountdownClock = () => {
+	isModalActive.value = false
+	fetchData()
+}
 </script>
 
 <template>
 	<h1>Рандомная цитата</h1>
-	<button @click="fetchData">Click Me!</button>
+	<button @click="fetchData">Получить цитату</button>
 	<p>{{ fetchedText }}</p>
 	<p>{{ fetchedTextАrray }}</p>
 
 	<div>
-		<div class="container">
-			<h1>SpeedPrint - помощник вашей скорости печати</h1>
-			<ul>
-				<li>Улучшите скорость печати текста</li>
-				<li>Уменьшите количество ошибок</li>
-				<li>Испытайте свои навыки</li>
-			</ul>
+		<div class="wrapper">
+			<div class="container">
+				<h1>SpeedPrint - помощник вашей скорости печати</h1>
+				<ul>
+					<li>Улучшите скорость печати текста</li>
+					<li>Уменьшите количество ошибок</li>
+					<li>Испытайте свои навыки</li>
+				</ul>
 
-			<div class="fetched">
-				<span
-					v-for="(symbol, index) in fetchedTextАrray"
-					:key="index"
-					class="fetched-text--initial"
-					:class="{
-						'fetched-text--correct': symbol.state === 'correct',
-						'fetched-text--wrong': symbol.state === 'wrong',
-					}"
-				>
-					{{ symbol.letter }}
-				</span>
-			</div>
-			<p>Переменная typedText {{ typedText }}</p>
-			<div class="text-wr">
-				<div class="typed">
-					<textarea
-						:placeholder="fetchedText"
-						v-model="typedText"
-						name="typedText"
-					/>
+				<button @click="fetchData()">Изменить текст</button>
+
+				<button @click="runCountdownClock()">Начать</button>
+
+				<div class="fetched">
+					<span
+						v-for="(symbol, index) in fetchedTextАrray"
+						:key="index"
+						class="fetched-text--initial"
+						:class="{
+							'fetched-text--correct': symbol.state === 'correct',
+							'fetched-text--wrong': symbol.state === 'wrong',
+						}"
+					>
+						{{ symbol.letter }}
+					</span>
 				</div>
+				<p>Переменная typedText {{ typedText }}</p>
+				<div class="text-wr">
+					<div class="typed">
+						<textarea
+							:placeholder="fetchedText"
+							v-model="typedText"
+							name="typedText"
+						/>
+					</div>
 
-				<div class="info">
-					<p class="info__speed">
+					<div class="info">
+						<p class="info__speed">
+							Скорость печати:
+							<span> 10</span>
+							знаков/сек
+						</p>
+						<p class="info__time">
+							Оставшееся время:
+							<span> {{ inSecondsDisplay }} </span>
+							c
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<div
+				class="modal-wr"
+				:class="{
+					'modal-wr--visible': isModalActive,
+				}"
+			>
+				<div class="modal">
+					<h2>Результаты</h2>
+					<p class="modal__time">
+						Времени потрачено:
+						<span> 60 </span>
+					</p>
+					<p class="modal__mistake">
+						Совершено ошибок:
+						<span> 18 </span>
+					</p>
+					<p class="modal__speed">
 						Скорость печати:
-						<span> 10</span>
+						<span> 0 </span>
 						знаков/сек
 					</p>
-					<p class="info__time">
-						Оставшееся время:
-						<span> 0</span>
-						c
-					</p>
+					<button @click="restartCountdownClock">Попробовать снова</button>
 				</div>
 			</div>
 		</div>
@@ -188,5 +274,27 @@ textarea::placeholder {
 	font-style: normal;
 	font-weight: 400;
 	color: black;
+}
+
+.wrapper {
+	position: relative;
+}
+
+.modal-wr {
+	display: none;
+
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+
+	justify-content: center;
+	align-items: center;
+	background: grey;
+}
+
+.modal-wr--visible {
+	display: flex;
 }
 </style>
