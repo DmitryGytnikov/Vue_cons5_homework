@@ -1,6 +1,8 @@
 <script setup>
 import "./assets/css/index.css"
 
+const { locales, setLocale } = useI18n()
+
 const fetchedText = ref("")
 const fetchedTextАrray = ref([])
 
@@ -108,7 +110,7 @@ const getText = () => {
 
 		const resultMidterm3 = fallbackTextАrray.map(function (elem) {
 			return elem.letter
-		}) // ['h', 'e', 'l', 'l', 'o'];
+		}) // ['h', 'e', 'l', 'l', 'o']; преобразование в массив посимвольно
 		// console.log(resultMidterm3)
 
 		const resultMidterm4 = resultMidterm3.join("") // преоразование в строку
@@ -209,13 +211,39 @@ const comparisonInputedText = () => {
 	<p>{{ fetchedTextАrray }}</p> -->
 
 	<div>
+		<button
+			v-for="locale in locales"
+			@click="setLocale(locale.code)"
+			:key="locale.name"
+		>
+			{{ locale.name }}
+		</button>
+
+		<div>{{ $t("header") }}</div>
+		<div>{{ $t("advantages.advantage_1") }}</div>
+		<div>{{ $t("advantages.advantage_2") }}</div>
+		<div>{{ $t("advantages.advantage_3") }}</div>
+		<div>{{ $t("speed.text_1") }}</div>
+		<div>{{ $t("speed.text_2") }}</div>
+		<div>{{ $t("time.text_1") }}</div>
+		<div>{{ $t("time.text_2") }}</div>
+		<div>{{ $t("results.header") }}</div>
+		<div>{{ $t("results.time_1") }}</div>
+		<div>{{ $t("results.time_2") }}</div>
+		<div>{{ $t("results.mistakes") }}</div>
+		<div>{{ $t("results.speed_1") }}</div>
+		<div>{{ $t("results.speed_2") }}</div>
+		<div>{{ $t("results.button") }}</div>
+	</div>
+
+	<div>
 		<div class="wrapper">
 			<div class="container">
-				<h1>SpeedPrint - помощник вашей скорости печати</h1>
+				<h1>{{ $t("header") }}</h1>
 				<ul>
-					<li>Улучшите скорость печати текста</li>
-					<li>Уменьшите количество ошибок</li>
-					<li>Испытайте свои навыки</li>
+					<li>{{ $t("advantages.advantage_1") }}</li>
+					<li>{{ $t("advantages.advantage_2") }}</li>
+					<li>{{ $t("advantages.advantage_3") }}</li>
 				</ul>
 
 				<button @click="fetchData()">Обновить текст</button>
@@ -248,19 +276,19 @@ const comparisonInputedText = () => {
 
 					<div class="info">
 						<p class="info__speed">
-							Скорость печати:
+							{{ $t("speed.text_1") }}
 							<span>
 								<!-- {{ correctLetterByInput / countDownInSecond }} -->
 								Не готово
 							</span>
-							знаков/сек
+							{{ $t("speed.text_2") }}
 						</p>
 						<p class="info__time">
-							Оставшееся время:
+							{{ $t("time.text_1") }}
 							<span>
 								{{ inSecondsDisplay }}
 							</span>
-							c
+							{{ $t("time.text_2") }}
 						</p>
 					</div>
 				</div>
@@ -273,28 +301,30 @@ const comparisonInputedText = () => {
 				}"
 			>
 				<div class="modal">
-					<h2>Результаты</h2>
+					<h2>{{ $t("results.header") }}</h2>
 					<p class="modal__time">
-						Времени потрачено:
+						{{ $t("results.time_1") }}
 						<span> {{ countDownInSecond }} </span>
-						cek
+						{{ $t("results.time_2") }}
 					</p>
 					<p class="modal__mistake">
-						Совершено ошибок:
+						{{ $t("results.mistakes") }}
 						<span>
 							<!-- {{ mistakesByInput }}  -->
 							Не готово
 						</span>
 					</p>
 					<p class="modal__speed">
-						Скорость печати:
+						{{ $t("results.speed_1") }}
 						<span>
 							<!-- {{ correctLetterByInput }}  -->
 							Не готово
 						</span>
-						знаков/сек
+						{{ $t("results.speed_2") }}
 					</p>
-					<button @click="restartCountdownClock">Попробовать снова</button>
+					<button @click="restartCountdownClock">
+						{{ $t("results.button") }}
+					</button>
 				</div>
 			</div>
 		</div>

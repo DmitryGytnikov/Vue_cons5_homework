@@ -1,0 +1,25 @@
+{
+	"header": "TypeSpeedBooster - ton pote de vitesse",
+	"advantages": {
+		"advantage_1": "Améliorer la vitesse d’impression du texte",
+		"advantage_2": "Réduire les erreurs",
+		"advantage_3": "Mettez vos compétences"
+	},
+	"speed": {
+		"text_1": "Vitesse d’impression :",
+		"text_2": "signes/sec"
+	},
+	"time": {
+		"text_1": "Temps restant",
+		"text_2": "sec"
+	},
+	"results": {
+		"header": "Résultats",
+		"time_1": "Temps passé :",
+		"time_2": "sec",
+		"mistakes": "Erreurs commises :",
+		"speed_1": "Vitesse d’impression :",
+		"speed_2": "signes/sec",
+		"button": "Réessayer"
+	}
+}
