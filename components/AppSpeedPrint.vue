@@ -72,7 +72,7 @@ const fallbackTextАrray = [
 	},
 ]
 
-const isModalActive = ref(false)
+// const isModalActive = ref(false)
 
 const fetchData = () => {
 	fetch("https://api.api-ninjas.com/v1/quotes", {
@@ -164,7 +164,8 @@ const runCountdownClock = () => {
 		if (distance < 0) {
 			clearInterval(x)
 			inSecondsDisplay.value = 0
-			isModalActive.value = true
+			// isModalActive.value = true
+			centerDialogVisible.value = true
 			// document.getElementById("demo").innerHTML = "EXPIRED"
 		}
 	}, 1000)
@@ -173,7 +174,9 @@ const runCountdownClock = () => {
 }
 
 const restartCountdownClock = () => {
-	isModalActive.value = false
+	// isModalActive.value = false
+	centerDialogVisible.value = false
+
 	fetchData()
 	typedText.value = ""
 	mistakesByInput.value = 0
@@ -207,24 +210,26 @@ const centerDialogVisible = ref(false)
 </script>
 
 <template>
-	<!-- <h1>Рандомная цитата</h1>
+	<h1>Рандомная цитата</h1>
 	<button @click="fetchData">Получить цитату</button>
 	<p>{{ fetchedText }}</p>
-	<p>{{ fetchedTextАrray }}</p> -->
+	<p>{{ fetchedTextАrray }}</p>
 
-	<div class="intern">
-		<el-button
-			v-for="locale in locales"
-			@click="setLocale(locale.code)"
-			:key="locale.name"
-			plain
-			type="primary"
-			style="width: 70px; border: 2px solid #409eff; border-radius: 5px"
-		>
-			{{ locale.name }}
-		</el-button>
+	<div>
+		<div class="container">
+			<div class="intern">
+				<el-button
+					v-for="locale in locales"
+					@click="setLocale(locale.code)"
+					:key="locale.name"
+					plain
+					type="primary"
+					style="width: 70px; border: 2px solid #409eff; border-radius: 5px"
+				>
+					{{ locale.name }}
+				</el-button>
 
-		<!-- <button
+				<!-- <button
 			v-for="locale in locales"
 			@click="setLocale(locale.code)"
 			:key="locale.name"
@@ -232,7 +237,7 @@ const centerDialogVisible = ref(false)
 			{{ locale.name }}
 		</button> -->
 
-		<!-- <div>{{ $t("header") }}</div>
+				<!-- <div>{{ $t("header") }}</div>
 		<div>{{ $t("advantages.advantage_1") }}</div>
 		<div>{{ $t("advantages.advantage_2") }}</div>
 		<div>{{ $t("advantages.advantage_3") }}</div>
@@ -247,67 +252,70 @@ const centerDialogVisible = ref(false)
 		<div>{{ $t("results.speed_1") }}</div>
 		<div>{{ $t("results.speed_2") }}</div>
 		<div>{{ $t("results.button") }}</div>-->
-	</div>
+			</div>
 
-	<div>
-		<div class="wrapper">
-			<div class="container">
-				<h1>{{ $t("header") }}</h1>
-				<ul>
-					<li>{{ $t("advantages.advantage_1") }}</li>
-					<li>{{ $t("advantages.advantage_2") }}</li>
-					<li>{{ $t("advantages.advantage_3") }}</li>
-				</ul>
-
-				<button @click="fetchData()">Обновить текст</button>
-				<br />
-				<button @click="runCountdownClock()">Начать</button>
-
-				<div class="fetched">
-					<span
-						v-for="(symbol, index) in fetchedTextАrray"
-						:key="index"
-						class="fetched-text--initial"
-						:class="{
-							'fetched-text--correct': symbol.state === 'correct',
-							'fetched-text--wrong': symbol.state === 'wrong',
-						}"
-					>
-						{{ symbol.letter }}
-					</span>
+			<div class="header-wr">
+				<div class="header__text">
+					<h1>{{ $t("header") }}</h1>
+					<ul>
+						<li>{{ $t("advantages.advantage_1") }}</li>
+						<li>{{ $t("advantages.advantage_2") }}</li>
+						<li>{{ $t("advantages.advantage_3") }}</li>
+					</ul>
 				</div>
-				<!-- <p>Переменная typedText {{ typedText }}</p> -->
-				<div class="text-wr">
-					<div class="typed">
-						<textarea
-							:placeholder="fetchedText"
-							v-model="typedText"
-							name="typedText"
-							@keyup="comparisonInputedText()"
-						/>
-					</div>
-
-					<div class="info">
-						<p class="info__speed">
-							{{ $t("speed.text_1") }}
-							<span>
-								<!-- {{ correctLetterByInput / countDownInSecond }} -->
-								Не готово
-							</span>
-							{{ $t("speed.text_2") }}
-						</p>
-						<p class="info__time">
-							{{ $t("time.text_1") }}
-							<span>
-								{{ inSecondsDisplay }}
-							</span>
-							{{ $t("time.text_2") }}
-						</p>
-					</div>
+				<div class="header__img">
+					<img src="../assets/img/image.png.png" alt="picture" />
 				</div>
 			</div>
 
-			<div
+			<button @click="fetchData()">Обновить текст</button>
+			<br />
+			<button @click="runCountdownClock()">Начать</button>
+
+			<div class="fetched">
+				<span
+					v-for="(symbol, index) in fetchedTextАrray"
+					:key="index"
+					class="fetched-text--initial"
+					:class="{
+						'fetched-text--correct': symbol.state === 'correct',
+						'fetched-text--wrong': symbol.state === 'wrong',
+					}"
+				>
+					{{ symbol.letter }}
+				</span>
+			</div>
+			<!-- <p>Переменная typedText {{ typedText }}</p> -->
+			<div class="text-wr">
+				<div class="typed">
+					<textarea
+						:placeholder="fetchedText"
+						v-model="typedText"
+						name="typedText"
+						@keyup="comparisonInputedText()"
+					/>
+				</div>
+
+				<div class="info">
+					<p class="info__speed">
+						{{ $t("speed.text_1") }}
+						<span>
+							<!-- {{ correctLetterByInput / countDownInSecond }} -->
+							Не готово
+						</span>
+						{{ $t("speed.text_2") }}
+					</p>
+					<p class="info__time">
+						{{ $t("time.text_1") }}
+						<span>
+							{{ inSecondsDisplay }}
+						</span>
+						{{ $t("time.text_2") }}
+					</p>
+				</div>
+			</div>
+
+			<!-- <div
 				class="modal-wr"
 				:class="{
 					'modal-wr--visible': isModalActive,
@@ -323,14 +331,14 @@ const centerDialogVisible = ref(false)
 					<p class="modal__mistake">
 						{{ $t("results.mistakes") }}
 						<span>
-							<!-- {{ mistakesByInput }}  -->
+							{{ mistakesByInput }}  
 							Не готово
 						</span>
 					</p>
 					<p class="modal__speed">
 						{{ $t("results.speed_1") }}
 						<span>
-							<!-- {{ correctLetterByInput }}  -->
+							 {{ correctLetterByInput }}  
 							Не готово
 						</span>
 						{{ $t("results.speed_2") }}
@@ -339,17 +347,17 @@ const centerDialogVisible = ref(false)
 						{{ $t("results.button") }}
 					</button>
 				</div>
-			</div>
+			</div> -->
 		</div>
 
-		<el-button plain @click="centerDialogVisible = true">
+		<!-- <el-button plain @click="centerDialogVisible = true">
 			Click to open the Dialog
-		</el-button>
+		</el-button> -->
 
 		<el-dialog
 			v-model="centerDialogVisible"
 			title="Результаты"
-			width="500"
+			width="70%"
 			align-center
 		>
 			<template #header="{ titleClass }">
@@ -383,7 +391,8 @@ const centerDialogVisible = ref(false)
 			</p>
 			<template #footer>
 				<div class="dialog-footer">
-					<el-button type="primary" @click="centerDialogVisible = false">
+					<!-- <el-button type="primary" @click="centerDialogVisible = false"> -->
+					<el-button type="primary" @click="restartCountdownClock">
 						{{ $t("results.button") }}
 					</el-button>
 				</div>
@@ -393,28 +402,114 @@ const centerDialogVisible = ref(false)
 </template>
 
 <style scoped>
-/* ________________ */
+/* .container {
+	height: 100%;
+	background-color: white;
+} */
 
-.intern {
+.container {
+	/* background-color: #ebecef; */
+
+	height: 100%;
+	background-color: white;
+
+	max-width: 1440px;
+	margin: 0 auto;
+	padding: 0 20px;
+
+	@media (max-width: 640px) {
+		padding: 0 10px;
+	}
 }
 
-.wrapper {
+.intern {
+	display: flex;
+	justify-content: end;
+}
+
+.header-wr {
+	padding-top: 64px;
+	padding-bottom: 96px;
+
+	display: flex;
+
+	@media (max-width: 640px) {
+		padding-top: 20px;
+		padding-bottom: 20px;
+	}
+}
+
+.header__text {
+	width: 50%;
+
+	@media (max-width: 640px) {
+		width: 100%;
+	}
+}
+
+.header__text h1 {
+	margin-bottom: 24px;
+	font-size: 36px;
+	line-height: 40px;
+	font-weight: 700;
+
+	@media (max-width: 640px) {
+		font-size: 32px;
+	}
+}
+
+.header__text ul {
+	list-style: none;
+}
+
+.header__text li {
+	padding-left: 20px;
+	margin-bottom: 12px;
 	position: relative;
 }
 
-.container {
+.header__text li::before {
+	content: "";
+	position: absolute;
+	width: 8px;
+	height: 8px;
+	background: #0284c7;
+	border-radius: 50%;
+	top: 7px;
+	left: 6px;
 }
 
-.container h1 {
+.header__img {
+	width: 50%;
+	text-align: center;
+
+	@media (max-width: 640px) {
+		display: none;
+	}
 }
 
-.container ul {
-}
-
-.container li {
+.header__img img {
+	height: 220px;
 }
 
 .fetched {
+	user-select: none;
+
+	background-color: white;
+	/* background-color: greenyellow; */
+	padding: 20px;
+	/* border-radius: 20px; */
+	border-bottom-left-radius: 20px;
+	border-bottom-right-radius: 20px;
+	/* border: 1px solid grey; */
+
+	box-shadow: 3px 3px 20px rgba(50, 50, 50, 0.25);
+
+	font-size: 24px;
+
+	@media (max-width: 640px) {
+		font-size: 16px;
+	}
 }
 
 .fetched-text--initial {
@@ -430,35 +525,83 @@ const centerDialogVisible = ref(false)
 	text-decoration: underline;
 }
 
-text-wr typed textarea {
-	/* background-color: transparent; */
-	border: 1px solid black;
-	width: 500px;
-	height: 50px;
+.text-wr {
+	background-color: white;
+	/* background-color: greenyellow; */
+	padding: 20px;
+	border-radius: 20px;
+	/* border: 1px solid grey; */
+	box-shadow: 3px 3px 20px rgba(50, 50, 50, 0.25);
+
+	display: flex;
 }
 
-textarea::placeholder {
+.typed {
+	flex-grow: 1;
+}
+
+.typed textarea {
+	/* background-color: transparent; 
+	border: 1px solid black;
+	width: 500px;
+	height: 50px; */
+	resize: none;
+	outline: none;
+	width: 100%;
+	height: 100%;
+
+	font: inherit;
+	font-size: 24px;
+	padding-right: 20px;
+
+	@media (max-width: 640px) {
+		font-size: 16px;
+		padding-right: 10px;
+	}
+}
+
+.typed textarea::placeholder {
 	/* font-style: normal;
 	font-weight: 400;
 	color: black; */
+	color: #889cb1;
 }
 
 .info {
+	padding: 8px;
+	border-left: 2px solid #e5e7eb;
+
+	width: 20%;
+
+	@media (max-width: 640px) {
+		width: 110px;
+	}
 }
 
 .info__speed {
+	font-size: 16px;
+	line-height: 24px;
+	text-align: center;
+	padding-bottom: 8px;
+
+	border-bottom: 2px solid #e5e7eb;
 }
 
 .info__speed span {
 }
 
 .info__time {
+	font-size: 16px;
+	line-height: 24px;
+	text-align: center;
+
+	padding-top: 8px;
 }
 
 .info__time span {
 }
 
-.modal-wr {
+/* .modal-wr {
 	display: none;
 
 	position: absolute;
@@ -474,5 +617,27 @@ textarea::placeholder {
 
 .modal-wr--visible {
 	display: flex;
+} */
+
+.modal__header {
+	/* color: red; */
+	/* padding: 20px 20px 10px 20px; */
+	font-size: 24px;
+	font-weight: 400;
+}
+
+.modal__time {
+	font-size: 18px;
+	line-height: 28px;
+}
+
+.modal__mistake {
+	font-size: 18px;
+	line-height: 28px;
+}
+
+.modal__speed {
+	font-size: 18px;
+	line-height: 28px;
 }
 </style>

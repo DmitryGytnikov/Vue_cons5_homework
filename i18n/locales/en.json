@@ -10,7 +10,7 @@
 		"text_2": "signs/sec"
 	},
 	"time": {
-		"text_1": "The remaining time",
+		"text_1": "The remaining time:",
 		"text_2": "sec"
 	},
 	"results": {
