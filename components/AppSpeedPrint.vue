@@ -133,7 +133,7 @@ const runCountdownClock = () => {
 	// countdown clock VVV
 
 	// Set the date we're counting down to
-	countDownInSecond.value = 10
+	countDownInSecond.value = 3
 	const countDownDate = new Date(
 		Date.parse(new Date()) + countDownInSecond.value * 1000
 	)
@@ -202,6 +202,8 @@ const comparisonInputedText = () => {
 		}
 	}
 }
+
+const centerDialogVisible = ref(false)
 </script>
 
 <template>
@@ -210,16 +212,27 @@ const comparisonInputedText = () => {
 	<p>{{ fetchedText }}</p>
 	<p>{{ fetchedTextАrray }}</p> -->
 
-	<div>
-		<button
+	<div class="intern">
+		<el-button
+			v-for="locale in locales"
+			@click="setLocale(locale.code)"
+			:key="locale.name"
+			plain
+			type="primary"
+			style="width: 70px; border: 2px solid #409eff; border-radius: 5px"
+		>
+			{{ locale.name }}
+		</el-button>
+
+		<!-- <button
 			v-for="locale in locales"
 			@click="setLocale(locale.code)"
 			:key="locale.name"
 		>
 			{{ locale.name }}
-		</button>
+		</button> -->
 
-		<div>{{ $t("header") }}</div>
+		<!-- <div>{{ $t("header") }}</div>
 		<div>{{ $t("advantages.advantage_1") }}</div>
 		<div>{{ $t("advantages.advantage_2") }}</div>
 		<div>{{ $t("advantages.advantage_3") }}</div>
@@ -233,7 +246,7 @@ const comparisonInputedText = () => {
 		<div>{{ $t("results.mistakes") }}</div>
 		<div>{{ $t("results.speed_1") }}</div>
 		<div>{{ $t("results.speed_2") }}</div>
-		<div>{{ $t("results.button") }}</div>
+		<div>{{ $t("results.button") }}</div>-->
 	</div>
 
 	<div>
@@ -328,15 +341,96 @@ const comparisonInputedText = () => {
 				</div>
 			</div>
 		</div>
+
+		<el-button plain @click="centerDialogVisible = true">
+			Click to open the Dialog
+		</el-button>
+
+		<el-dialog
+			v-model="centerDialogVisible"
+			title="Результаты"
+			width="500"
+			align-center
+		>
+			<template #header="{ titleClass }">
+				<div class="my-header">
+					<h2 class="modal__header" :class="titleClass">
+						{{ $t("results.header") }}
+					</h2>
+				</div>
+			</template>
+
+			<!-- <h2>{{ $t("results.header") }}</h2> -->
+			<p class="modal__time">
+				{{ $t("results.time_1") }}
+				<span> {{ countDownInSecond }} </span>
+				{{ $t("results.time_2") }}
+			</p>
+			<p class="modal__mistake">
+				{{ $t("results.mistakes") }}
+				<span>
+					<!-- {{ mistakesByInput }}  -->
+					Не готово
+				</span>
+			</p>
+			<p class="modal__speed">
+				{{ $t("results.speed_1") }}
+				<span>
+					<!-- {{ correctLetterByInput }}  -->
+					Не готово
+				</span>
+				{{ $t("results.speed_2") }}
+			</p>
+			<template #footer>
+				<div class="dialog-footer">
+					<el-button type="primary" @click="centerDialogVisible = false">
+						{{ $t("results.button") }}
+					</el-button>
+				</div>
+			</template>
+		</el-dialog>
 	</div>
 </template>
 
 <style scoped>
-/* .container { */
-/* background-color: blue; */
-/* } */
+/* ________________ */
 
-textarea {
+.intern {
+}
+
+.wrapper {
+	position: relative;
+}
+
+.container {
+}
+
+.container h1 {
+}
+
+.container ul {
+}
+
+.container li {
+}
+
+.fetched {
+}
+
+.fetched-text--initial {
+	color: black;
+}
+
+.fetched-text--correct {
+	color: #29a04b;
+}
+
+.fetched-text--wrong {
+	color: red;
+	text-decoration: underline;
+}
+
+text-wr typed textarea {
 	/* background-color: transparent; */
 	border: 1px solid black;
 	width: 500px;
@@ -344,13 +438,24 @@ textarea {
 }
 
 textarea::placeholder {
-	font-style: normal;
+	/* font-style: normal;
 	font-weight: 400;
-	color: black;
+	color: black; */
 }
 
-.wrapper {
-	position: relative;
+.info {
+}
+
+.info__speed {
+}
+
+.info__speed span {
+}
+
+.info__time {
+}
+
+.info__time span {
 }
 
 .modal-wr {
@@ -369,45 +474,5 @@ textarea::placeholder {
 
 .modal-wr--visible {
 	display: flex;
-}
-
-.fetched-text--initial {
-	color: black;
-}
-
-.fetched-text--correct {
-	color: #29a04b;
-}
-
-.fetched-text--wrong {
-	color: red;
-	text-decoration: underline;
-}
-
-/* Удалить стили ниже VVV */
-
-ul {
-	margin-bottom: 20px;
-}
-
-.fetched {
-	margin-top: 20px;
-	margin-bottom: 50px;
-}
-
-.container button {
-	cursor: pointer;
-	padding: 10px;
-	border: 1px solid black;
-	border-radius: 5px;
-}
-
-.text-wr {
-	display: flex;
-	gap: 20px;
-}
-
-.wrapper {
-	padding: 30px;
 }
 </style>

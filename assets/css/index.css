@@ -1,15 +1,16 @@
 body {
 	margin: 0;
 	position: relative;
+	font-family: "Segoe UI", Arial, sans-serif;
 }
 
-/* .el-popconfirm__action .el-button:hover,
-.el-popconfirm__action .el-button:focus,
-.el-popconfirm__action .el-button:active {
+.intern .el-button:hover,
+.intern .el-button:focus,
+.intern .el-button:active {
 	border: 2px solid #409eff;
 	background-color: #409eff;
 	color: #f3ffff;
-} */
+}
 
 #__nuxt {
 	position: relative;
