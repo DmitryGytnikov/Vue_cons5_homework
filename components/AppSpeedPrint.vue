@@ -230,6 +230,8 @@ const centerDialogVisible = ref(false)
 	<p>{{ fetchedText }}</p>
 	<p>{{ fetchedTextАrray }}</p>  -->
 
+	<h1 class="text-3xl font-bold underline bg-red-300">Hello world!</h1>
+
 	<div>
 		<div class="container">
 			<div class="intern">
