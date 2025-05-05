@@ -72,8 +72,6 @@ const fallbackTextАrray = [
 	},
 ]
 
-// const isModalActive = ref(false)
-
 const fetchData = () => {
 	fetch("https://api.api-ninjas.com/v1/quotes", {
 		method: "GET",
@@ -125,21 +123,20 @@ getText()
 let inSecondsDisplay = ref(0)
 let countDownInSecond = ref(0)
 
-const runCountdownClock = () => {
-	typedText.value = ""
-	mistakesByInput.value = 0
-	correctLetterByInput.value = 0
+let x = () => {}
 
+const runCountdownClock = () => {
 	// countdown clock VVV
 
 	// Set the date we're counting down to
-	countDownInSecond.value = 3
+	countDownInSecond.value = 60
 	const countDownDate = new Date(
 		Date.parse(new Date()) + countDownInSecond.value * 1000
 	)
 
 	// Update the count down every 1 second
-	const x = setInterval(function () {
+	// const x = setInterval(function () {
+	x = setInterval(function () {
 		// Get today's date and time
 		const now = new Date().getTime()
 
@@ -164,7 +161,6 @@ const runCountdownClock = () => {
 		if (distance < 0) {
 			clearInterval(x)
 			inSecondsDisplay.value = 0
-			// isModalActive.value = true
 			centerDialogVisible.value = true
 			// document.getElementById("demo").innerHTML = "EXPIRED"
 		}
@@ -174,13 +170,13 @@ const runCountdownClock = () => {
 }
 
 const restartCountdownClock = () => {
-	// isModalActive.value = false
-	centerDialogVisible.value = false
-
-	fetchData()
 	typedText.value = ""
 	mistakesByInput.value = 0
 	correctLetterByInput.value = 0
+
+	fetchData()
+
+	centerDialogVisible.value = false
 }
 
 const mistakesByInput = ref(0)
@@ -190,19 +186,32 @@ const comparisonInputedText = () => {
 	for (let i = 0; i < typedText.value.length; i++) {
 		if (fetchedText.value[i] === typedText.value[i]) {
 			fetchedTextАrray.value[i].state = "correct"
-			console.log("добавлено correct")
-			console.log(i)
-
-			// correctLetterByInput.value += 1
-			// console.log("Корректно введено " + correctLetterByInput.value)
+			// console.log("добавлено correct")
+			// console.log(i)
 		} else {
 			fetchedTextАrray.value[i].state = "wrong"
-			console.log("добавлено wrong")
-			console.log(i)
-
-			// mistakesByInput.value += 1
-			// console.log("Ошибок " + mistakesByInput.value)
+			// console.log("добавлено wrong")
+			// console.log(i)
 		}
+	}
+
+	for (let i = typedText.value.length; i < fetchedText.value.length; i++) {
+		fetchedTextАrray.value[i].state = "initial"
+	}
+
+	correctLetterByInput.value = fetchedTextАrray.value.filter(
+		item => item.state === "correct"
+	).length
+
+	mistakesByInput.value = fetchedTextАrray.value.filter(
+		item => item.state === "wrong"
+	).length
+
+	if (typedText.value.length >= fetchedText.value.length) {
+		console.log("привет")
+		clearInterval(x)
+
+		centerDialogVisible.value = true
 	}
 }
 
@@ -210,10 +219,9 @@ const centerDialogVisible = ref(false)
 </script>
 
 <template>
-	<h1>Рандомная цитата</h1>
-	<button @click="fetchData">Получить цитату</button>
+	<!-- <button @click="fetchData">Получить цитату</button>
 	<p>{{ fetchedText }}</p>
-	<p>{{ fetchedTextАrray }}</p>
+	<p>{{ fetchedTextАrray }}</p>  -->
 
 	<div>
 		<div class="container">
@@ -228,30 +236,6 @@ const centerDialogVisible = ref(false)
 				>
 					{{ locale.name }}
 				</el-button>
-
-				<!-- <button
-			v-for="locale in locales"
-			@click="setLocale(locale.code)"
-			:key="locale.name"
-		>
-			{{ locale.name }}
-		</button> -->
-
-				<!-- <div>{{ $t("header") }}</div>
-		<div>{{ $t("advantages.advantage_1") }}</div>
-		<div>{{ $t("advantages.advantage_2") }}</div>
-		<div>{{ $t("advantages.advantage_3") }}</div>
-		<div>{{ $t("speed.text_1") }}</div>
-		<div>{{ $t("speed.text_2") }}</div>
-		<div>{{ $t("time.text_1") }}</div>
-		<div>{{ $t("time.text_2") }}</div>
-		<div>{{ $t("results.header") }}</div>
-		<div>{{ $t("results.time_1") }}</div>
-		<div>{{ $t("results.time_2") }}</div>
-		<div>{{ $t("results.mistakes") }}</div>
-		<div>{{ $t("results.speed_1") }}</div>
-		<div>{{ $t("results.speed_2") }}</div>
-		<div>{{ $t("results.button") }}</div>-->
 			</div>
 
 			<div class="header-wr">
@@ -268,9 +252,9 @@ const centerDialogVisible = ref(false)
 				</div>
 			</div>
 
-			<button @click="fetchData()">Обновить текст</button>
+			<!-- <button @click="fetchData()">Обновить текст</button>
 			<br />
-			<button @click="runCountdownClock()">Начать</button>
+			<button @click="runCountdownClock()">Начать</button> -->
 
 			<div class="fetched">
 				<span
@@ -285,7 +269,11 @@ const centerDialogVisible = ref(false)
 					{{ symbol.letter }}
 				</span>
 			</div>
-			<!-- <p>Переменная typedText {{ typedText }}</p> -->
+
+			<!-- <p>Переменная typedText {{ typedText }}</p>
+			<p>Переменная correctLetterByInput {{ correctLetterByInput }}</p>
+			<p>Переменная mistakesByInput {{ mistakesByInput }}</p> -->
+
 			<div class="text-wr">
 				<div class="typed">
 					<textarea
@@ -293,15 +281,24 @@ const centerDialogVisible = ref(false)
 						v-model="typedText"
 						name="typedText"
 						@keyup="comparisonInputedText()"
+						@click="runCountdownClock()"
 					/>
 				</div>
 
 				<div class="info">
 					<p class="info__speed">
 						{{ $t("speed.text_1") }}
-						<span>
-							<!-- {{ correctLetterByInput / countDownInSecond }} -->
-							Не готово
+						<span
+							v-if="
+								correctLetterByInput / (countDownInSecond - inSecondsDisplay)
+							"
+						>
+							{{
+								(
+									correctLetterByInput /
+									(countDownInSecond - inSecondsDisplay)
+								).toFixed(2)
+							}}
 						</span>
 						{{ $t("speed.text_2") }}
 					</p>
@@ -314,45 +311,7 @@ const centerDialogVisible = ref(false)
 					</p>
 				</div>
 			</div>
-
-			<!-- <div
-				class="modal-wr"
-				:class="{
-					'modal-wr--visible': isModalActive,
-				}"
-			>
-				<div class="modal">
-					<h2>{{ $t("results.header") }}</h2>
-					<p class="modal__time">
-						{{ $t("results.time_1") }}
-						<span> {{ countDownInSecond }} </span>
-						{{ $t("results.time_2") }}
-					</p>
-					<p class="modal__mistake">
-						{{ $t("results.mistakes") }}
-						<span>
-							{{ mistakesByInput }}  
-							Не готово
-						</span>
-					</p>
-					<p class="modal__speed">
-						{{ $t("results.speed_1") }}
-						<span>
-							 {{ correctLetterByInput }}  
-							Не готово
-						</span>
-						{{ $t("results.speed_2") }}
-					</p>
-					<button @click="restartCountdownClock">
-						{{ $t("results.button") }}
-					</button>
-				</div>
-			</div> -->
 		</div>
-
-		<!-- <el-button plain @click="centerDialogVisible = true">
-			Click to open the Dialog
-		</el-button> -->
 
 		<el-dialog
 			v-model="centerDialogVisible"
@@ -368,30 +327,31 @@ const centerDialogVisible = ref(false)
 				</div>
 			</template>
 
-			<!-- <h2>{{ $t("results.header") }}</h2> -->
 			<p class="modal__time">
 				{{ $t("results.time_1") }}
-				<span> {{ countDownInSecond }} </span>
+				<span> {{ countDownInSecond - inSecondsDisplay }} </span>
 				{{ $t("results.time_2") }}
 			</p>
 			<p class="modal__mistake">
 				{{ $t("results.mistakes") }}
 				<span>
-					<!-- {{ mistakesByInput }}  -->
-					Не готово
+					{{ mistakesByInput }}
 				</span>
 			</p>
 			<p class="modal__speed">
 				{{ $t("results.speed_1") }}
 				<span>
-					<!-- {{ correctLetterByInput }}  -->
-					Не готово
+					{{
+						(
+							correctLetterByInput /
+							(countDownInSecond - inSecondsDisplay)
+						).toFixed(2)
+					}}
 				</span>
 				{{ $t("results.speed_2") }}
 			</p>
 			<template #footer>
 				<div class="dialog-footer">
-					<!-- <el-button type="primary" @click="centerDialogVisible = false"> -->
 					<el-button type="primary" @click="restartCountdownClock">
 						{{ $t("results.button") }}
 					</el-button>
@@ -402,14 +362,7 @@ const centerDialogVisible = ref(false)
 </template>
 
 <style scoped>
-/* .container {
-	height: 100%;
-	background-color: white;
-} */
-
 .container {
-	/* background-color: #ebecef; */
-
 	height: 100%;
 	background-color: white;
 
@@ -496,12 +449,9 @@ const centerDialogVisible = ref(false)
 	user-select: none;
 
 	background-color: white;
-	/* background-color: greenyellow; */
 	padding: 20px;
-	/* border-radius: 20px; */
 	border-bottom-left-radius: 20px;
 	border-bottom-right-radius: 20px;
-	/* border: 1px solid grey; */
 
 	box-shadow: 3px 3px 20px rgba(50, 50, 50, 0.25);
 
@@ -527,10 +477,8 @@ const centerDialogVisible = ref(false)
 
 .text-wr {
 	background-color: white;
-	/* background-color: greenyellow; */
 	padding: 20px;
 	border-radius: 20px;
-	/* border: 1px solid grey; */
 	box-shadow: 3px 3px 20px rgba(50, 50, 50, 0.25);
 
 	display: flex;
@@ -541,10 +489,6 @@ const centerDialogVisible = ref(false)
 }
 
 .typed textarea {
-	/* background-color: transparent; 
-	border: 1px solid black;
-	width: 500px;
-	height: 50px; */
 	resize: none;
 	outline: none;
 	width: 100%;
@@ -561,9 +505,6 @@ const centerDialogVisible = ref(false)
 }
 
 .typed textarea::placeholder {
-	/* font-style: normal;
-	font-weight: 400;
-	color: black; */
 	color: #889cb1;
 }
 
@@ -601,27 +542,7 @@ const centerDialogVisible = ref(false)
 .info__time span {
 }
 
-/* .modal-wr {
-	display: none;
-
-	position: absolute;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-
-	justify-content: center;
-	align-items: center;
-	background: grey;
-}
-
-.modal-wr--visible {
-	display: flex;
-} */
-
 .modal__header {
-	/* color: red; */
-	/* padding: 20px 20px 10px 20px; */
 	font-size: 24px;
 	font-weight: 400;
 }
