@@ -1,3 +1,4 @@
+<!--<script setup lang="ts">-->
 <script setup>
 import "./assets/css/index.css"
 
@@ -5,6 +6,11 @@ const { locales, setLocale } = useI18n()
 
 const fetchedText = ref("")
 const fetchedTextАrray = ref([])
+
+// type Letter = {
+// 	letter: string
+// 	state: "initial" | "correct" | "wrong"
+// }
 
 const typedText = ref("")
 
@@ -173,6 +179,7 @@ const restartCountdownClock = () => {
 	typedText.value = ""
 	mistakesByInput.value = 0
 	correctLetterByInput.value = 0
+	inSecondsDisplay.value = 0
 
 	fetchData()
 
@@ -528,18 +535,12 @@ const centerDialogVisible = ref(false)
 	border-bottom: 2px solid #e5e7eb;
 }
 
-.info__speed span {
-}
-
 .info__time {
 	font-size: 16px;
 	line-height: 24px;
 	text-align: center;
 
 	padding-top: 8px;
-}
-
-.info__time span {
 }
 
 .modal__header {

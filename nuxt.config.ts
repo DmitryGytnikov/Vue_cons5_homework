@@ -15,4 +15,8 @@ export default defineNuxtConfig({
 		],
 		defaultLocale: "ru",
 	},
+	typescript: {
+		typeCheck: true,
+		strict: false,
+	},
 })
