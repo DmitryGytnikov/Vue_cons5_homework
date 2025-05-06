@@ -9,6 +9,9 @@
 	.my-custom-style {
 		background-color: blueviolet;
 	}
+	.my-text {
+		@apply pl-5 mb-3 relative before:absolute before:w-2 before:h-2 before:bg-[#0284c7] before:rounded-[50%] before:top-[7px] before:left-[6px];
+	}
 }
 
 /* добавление своих собственных базовых стилей по умолчанию  */

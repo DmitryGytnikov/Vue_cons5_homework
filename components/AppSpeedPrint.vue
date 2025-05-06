@@ -253,19 +253,13 @@ const centerDialogVisible = ref(false)
 						{{ $t("header") }}
 					</h1>
 					<ul class="list-image-none">
-						<li
-							class="pl-5 mb-3 relative before:absolute before:w-2 before:h-2 before:bg-[#0284c7] before:rounded-[50%] before:top-[7px] before:left-[6px]"
-						>
+						<li class="my-text">
 							{{ $t("advantages.advantage_1") }}
 						</li>
-						<li
-							class="pl-5 mb-3 relative before:absolute before:w-2 before:h-2 before:bg-[#0284c7] before:rounded-[50%] before:top-[7px] before:left-[6px]"
-						>
+						<li class="my-text">
 							{{ $t("advantages.advantage_2") }}
 						</li>
-						<li
-							class="pl-5 mb-3 relative before:absolute before:w-2 before:h-2 before:bg-[#0284c7] before:rounded-[50%] before:top-[7px] before:left-[6px]"
-						>
+						<li class="my-text">
 							{{ $t("advantages.advantage_3") }}
 						</li>
 					</ul>
