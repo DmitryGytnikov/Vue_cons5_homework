@@ -230,11 +230,11 @@ const centerDialogVisible = ref(false)
 	<p>{{ fetchedText }}</p>
 	<p>{{ fetchedTextАrray }}</p>  -->
 
-	<h1 class="text-3xl font-bold underline bg-red-300">Hello world!</h1>
+	<!-- <h1 class="text-3xl font-bold underline bg-red-300">Hello world!</h1> -->
 
 	<div>
-		<div class="container">
-			<div class="intern">
+		<div class="h-full bg-white max-w-360 mx-auto my-0 px-2.5 sm:px-5">
+			<div class="flex justify-end">
 				<el-button
 					v-for="locale in locales"
 					@click="setLocale(locale.code)"
@@ -247,17 +247,36 @@ const centerDialogVisible = ref(false)
 				</el-button>
 			</div>
 
-			<div class="header-wr">
-				<div class="header__text">
-					<h1>{{ $t("header") }}</h1>
-					<ul>
-						<li>{{ $t("advantages.advantage_1") }}</li>
-						<li>{{ $t("advantages.advantage_2") }}</li>
-						<li>{{ $t("advantages.advantage_3") }}</li>
+			<div class="flex pt-5 pb-5 sm:pt-16 sm:pb-24">
+				<div class="w-full sm:w-1/2">
+					<h1 class="mb-6 text-[32px] leading-[40px] font-bold sm:text-[36px]">
+						{{ $t("header") }}
+					</h1>
+					<ul class="list-image-none">
+						<li
+							class="pl-5 mb-3 relative before:absolute before:w-2 before:h-2 before:bg-[#0284c7] before:rounded-[50%] before:top-[7px] before:left-[6px]"
+						>
+							{{ $t("advantages.advantage_1") }}
+						</li>
+						<li
+							class="pl-5 mb-3 relative before:absolute before:w-2 before:h-2 before:bg-[#0284c7] before:rounded-[50%] before:top-[7px] before:left-[6px]"
+						>
+							{{ $t("advantages.advantage_2") }}
+						</li>
+						<li
+							class="pl-5 mb-3 relative before:absolute before:w-2 before:h-2 before:bg-[#0284c7] before:rounded-[50%] before:top-[7px] before:left-[6px]"
+						>
+							{{ $t("advantages.advantage_3") }}
+						</li>
 					</ul>
 				</div>
-				<div class="header__img">
-					<img src="../assets/img/image.png.png" alt="picture" />
+				<!-- text-center -->
+				<div class="w-1/2 hidden justify-center sm:flex">
+					<img
+						class="h-[220px]"
+						src="../assets/img/image.png.png"
+						alt="picture"
+					/>
 				</div>
 			</div>
 
@@ -265,11 +284,13 @@ const centerDialogVisible = ref(false)
 			<br />
 			<button @click="runCountdownClock()">Начать</button> -->
 
-			<div class="fetched">
+			<div
+				class="select-none bg-white p-5 rounded-bl-[20px] rounded-br-[20px] shadow-[3px_3px_20px_rgba(50,50,50,0.25)] text-[16px] sm:text-[24px]"
+			>
 				<span
 					v-for="(symbol, index) in fetchedTextАrray"
 					:key="index"
-					class="fetched-text--initial"
+					class="text-black"
 					:class="{
 						'fetched-text--correct': symbol.state === 'correct',
 						'fetched-text--wrong': symbol.state === 'wrong',
@@ -283,9 +304,12 @@ const centerDialogVisible = ref(false)
 			<p>Переменная correctLetterByInput {{ correctLetterByInput }}</p>
 			<p>Переменная mistakesByInput {{ mistakesByInput }}</p> -->
 
-			<div class="text-wr">
-				<div class="typed">
+			<div
+				class="bg-white p-5 rounded-[20px] shadow-[3px_3px_20px_rgba(50,50,50,0.25)] flex"
+			>
+				<div class="grow">
 					<textarea
+						class="resize-none outline-none w-full h-full text-[16px] pr-2.5 sm:text-[24px] sm:pr-5 placeholder:text-[#889cb1]"
 						:placeholder="fetchedText"
 						v-model="typedText"
 						name="typedText"
@@ -294,8 +318,12 @@ const centerDialogVisible = ref(false)
 					/>
 				</div>
 
-				<div class="info">
-					<p class="info__speed">
+				<div
+					class="p-2 border-l-2 border-l-solid border-l-[#e5e7eb] w-[110px] sm:w-1/5"
+				>
+					<p
+						class="text-[16px] leading-[24px] text-center pb-2 border-b-2 border-b-solid border-b-[#e5e7eb]"
+					>
 						{{ $t("speed.text_1") }}
 						<span
 							v-if="
@@ -311,7 +339,7 @@ const centerDialogVisible = ref(false)
 						</span>
 						{{ $t("speed.text_2") }}
 					</p>
-					<p class="info__time">
+					<p class="text-[16px] leading-[24px] text-center pt-2">
 						{{ $t("time.text_1") }}
 						<span>
 							{{ inSecondsDisplay }}
@@ -330,24 +358,24 @@ const centerDialogVisible = ref(false)
 		>
 			<template #header="{ titleClass }">
 				<div class="my-header">
-					<h2 class="modal__header" :class="titleClass">
+					<h2 class="modal__header text-[24px] font-bold" :class="titleClass">
 						{{ $t("results.header") }}
 					</h2>
 				</div>
 			</template>
 
-			<p class="modal__time">
+			<p class="text-[18px] leading-[28px]">
 				{{ $t("results.time_1") }}
 				<span> {{ countDownInSecond - inSecondsDisplay }} </span>
 				{{ $t("results.time_2") }}
 			</p>
-			<p class="modal__mistake">
+			<p class="text-[18px] leading-[28px]">
 				{{ $t("results.mistakes") }}
 				<span>
 					{{ mistakesByInput }}
 				</span>
 			</p>
-			<p class="modal__speed">
+			<p class="text-[18px] leading-[28px]">
 				{{ $t("results.speed_1") }}
 				<span>
 					{{
@@ -371,110 +399,6 @@ const centerDialogVisible = ref(false)
 </template>
 
 <style scoped>
-.container {
-	height: 100%;
-	background-color: white;
-
-	max-width: 1440px;
-	margin: 0 auto;
-	padding: 0 20px;
-
-	@media (max-width: 640px) {
-		padding: 0 10px;
-	}
-}
-
-.intern {
-	display: flex;
-	justify-content: end;
-}
-
-.header-wr {
-	padding-top: 64px;
-	padding-bottom: 96px;
-
-	display: flex;
-
-	@media (max-width: 640px) {
-		padding-top: 20px;
-		padding-bottom: 20px;
-	}
-}
-
-.header__text {
-	width: 50%;
-
-	@media (max-width: 640px) {
-		width: 100%;
-	}
-}
-
-.header__text h1 {
-	margin-bottom: 24px;
-	font-size: 36px;
-	line-height: 40px;
-	font-weight: 700;
-
-	@media (max-width: 640px) {
-		font-size: 32px;
-	}
-}
-
-.header__text ul {
-	list-style: none;
-}
-
-.header__text li {
-	padding-left: 20px;
-	margin-bottom: 12px;
-	position: relative;
-}
-
-.header__text li::before {
-	content: "";
-	position: absolute;
-	width: 8px;
-	height: 8px;
-	background: #0284c7;
-	border-radius: 50%;
-	top: 7px;
-	left: 6px;
-}
-
-.header__img {
-	width: 50%;
-	text-align: center;
-
-	@media (max-width: 640px) {
-		display: none;
-	}
-}
-
-.header__img img {
-	height: 220px;
-}
-
-.fetched {
-	user-select: none;
-
-	background-color: white;
-	padding: 20px;
-	border-bottom-left-radius: 20px;
-	border-bottom-right-radius: 20px;
-
-	box-shadow: 3px 3px 20px rgba(50, 50, 50, 0.25);
-
-	font-size: 24px;
-
-	@media (max-width: 640px) {
-		font-size: 16px;
-	}
-}
-
-.fetched-text--initial {
-	color: black;
-}
-
 .fetched-text--correct {
 	color: #29a04b;
 }
@@ -484,84 +408,8 @@ const centerDialogVisible = ref(false)
 	text-decoration: underline;
 }
 
-.text-wr {
-	background-color: white;
-	padding: 20px;
-	border-radius: 20px;
-	box-shadow: 3px 3px 20px rgba(50, 50, 50, 0.25);
-
-	display: flex;
-}
-
-.typed {
-	flex-grow: 1;
-}
-
-.typed textarea {
-	resize: none;
-	outline: none;
-	width: 100%;
-	height: 100%;
-
-	font: inherit;
-	font-size: 24px;
-	padding-right: 20px;
-
-	@media (max-width: 640px) {
-		font-size: 16px;
-		padding-right: 10px;
-	}
-}
-
-.typed textarea::placeholder {
-	color: #889cb1;
-}
-
-.info {
-	padding: 8px;
-	border-left: 2px solid #e5e7eb;
-
-	width: 20%;
-
-	@media (max-width: 640px) {
-		width: 110px;
-	}
-}
-
-.info__speed {
-	font-size: 16px;
-	line-height: 24px;
-	text-align: center;
-	padding-bottom: 8px;
-
-	border-bottom: 2px solid #e5e7eb;
-}
-
-.info__time {
-	font-size: 16px;
-	line-height: 24px;
-	text-align: center;
-
-	padding-top: 8px;
-}
-
 .modal__header {
 	font-size: 24px;
 	font-weight: 400;
-}
-
-.modal__time {
-	font-size: 18px;
-	line-height: 28px;
-}
-
-.modal__mistake {
-	font-size: 18px;
-	line-height: 28px;
-}
-
-.modal__speed {
-	font-size: 18px;
-	line-height: 28px;
 }
 </style>

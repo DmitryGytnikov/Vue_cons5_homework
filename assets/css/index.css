@@ -1,19 +1,9 @@
 body {
 	margin: 0;
-	/* position: relative; */
 	font-family: "Segoe UI", Arial, sans-serif;
 	background-color: #ffffff;
 	min-width: 320px;
 	height: 100%;
-}
-
-*,
-*::before,
-*::after {
-	padding: 0;
-	margin: 0;
-	border: 0;
-	box-sizing: border-box;
 }
 
 .intern .el-button:hover,
@@ -23,10 +13,6 @@ body {
 	background-color: #409eff;
 	color: #f3ffff;
 }
-
-/* #__nuxt {
-	position: relative;
-} */
 
 .el-dialog__body {
 	padding-top: 30px;
