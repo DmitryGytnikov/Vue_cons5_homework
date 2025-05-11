@@ -2,12 +2,6 @@
 const { locales, setLocale } = useI18n()
 </script>
 <template>
-	<!-- <button @click="fetchData()">Обновить текст</button>
-			<br />
-			<button @click="runCountdownClock()">Начать</button> -->
-	<!-- <p>Переменная typedText {{ typedText }}</p>
-			<p>Переменная correctLetterByInput {{ correctLetterByInput }}</p>
-			<p>Переменная mistakesByInput {{ mistakesByInput }}</p> -->
 	<div class="basis-1/3">
 		<div class="intern flex justify-end">
 			<el-button
