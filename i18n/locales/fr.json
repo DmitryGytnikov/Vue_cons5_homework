@@ -7,7 +7,7 @@
 	},
 	"speed": {
 		"text_1": "Vitesse d’impression :",
-		"text_2": "signes/sec"
+		"text_2": "signes/min"
 	},
 	"time": {
 		"text_1": "Temps restant:",
@@ -19,7 +19,7 @@
 		"time_2": "sec",
 		"mistakes": "Erreurs commises :",
 		"speed_1": "Vitesse d’impression :",
-		"speed_2": "signes/sec",
+		"speed_2": "signes/min",
 		"button": "Réessayer"
 	}
 }

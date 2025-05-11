@@ -7,7 +7,7 @@
 	},
 	"speed": {
 		"text_1": "Print speed:",
-		"text_2": "signs/sec"
+		"text_2": "signs/min"
 	},
 	"time": {
 		"text_1": "The remaining time:",
@@ -19,7 +19,7 @@
 		"time_2": "sec",
 		"mistakes": "Mistakes made:",
 		"speed_1": "Print speed:",
-		"speed_2": "signs/sec",
+		"speed_2": "signs/min",
 		"button": "Try again"
 	}
 }

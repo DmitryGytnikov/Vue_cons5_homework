@@ -1,7 +1,4 @@
-<!--<script setup lang="ts">-->
 <script setup>
-import "./assets/css/index.css"
-
 const { locales, setLocale } = useI18n()
 
 const fetchedText = ref("")
@@ -226,97 +223,47 @@ const centerDialogVisible = ref(false)
 </script>
 
 <template>
-	<!-- <button @click="fetchData">Получить цитату</button>
-	<p>{{ fetchedText }}</p>
-	<p>{{ fetchedTextАrray }}</p>  -->
+	<div class="basis-2/3 flex flex-col justify-evenly h-full">
+		<div
+			class="basis-1/4 select-none bg-white p-5 rounded-bl-[20px] rounded-br-[20px] shadow-[3px_3px_20px_rgba(50,50,50,0.25)] text-[16px] sm:text-[24px]"
+		>
+			<span
+				v-for="(symbol, index) in fetchedTextАrray"
+				:key="index"
+				class="text-black"
+				:class="{
+					'fetched-text--correct': symbol.state === 'correct',
+					'fetched-text--wrong': symbol.state === 'wrong',
+				}"
+			>
+				{{ symbol.letter }}
+			</span>
+		</div>
 
-	<!-- <h1 class="text-3xl font-bold underline bg-red-300">Hello world!</h1> -->
-
-	<div>
-		<div class="h-full bg-white max-w-360 mx-auto my-0 px-2.5 sm:px-5">
-			<div class="flex justify-end">
-				<el-button
-					v-for="locale in locales"
-					@click="setLocale(locale.code)"
-					:key="locale.name"
-					plain
-					type="primary"
-					style="width: 70px; border: 2px solid #409eff; border-radius: 5px"
-				>
-					{{ locale.name }}
-				</el-button>
+		<div
+			class="basis-1/2 bg-white p-5 rounded-[20px] shadow-[3px_3px_20px_rgba(50,50,50,0.25)] flex"
+		>
+			<div class="grow">
+				<textarea
+					class="resize-none outline-none w-full h-full text-[16px] pr-2.5 sm:text-[24px] sm:pr-5 placeholder:text-[#889cb1]"
+					:placeholder="fetchedText"
+					v-model="typedText"
+					name="typedText"
+					@keyup="comparisonInputedText()"
+					@click="runCountdownClock()"
+				/>
 			</div>
-
-			<div class="flex pt-5 pb-5 sm:pt-16 sm:pb-24">
-				<div class="w-full sm:w-1/2">
-					<h1 class="mb-6 text-[32px] leading-[40px] font-bold sm:text-[36px]">
-						{{ $t("header") }}
-					</h1>
-					<ul class="list-image-none">
-						<li class="my-text">
-							{{ $t("advantages.advantage_1") }}
-						</li>
-						<li class="my-text">
-							{{ $t("advantages.advantage_2") }}
-						</li>
-						<li class="my-text">
-							{{ $t("advantages.advantage_3") }}
-						</li>
-					</ul>
-				</div>
-				<div class="w-1/2 hidden justify-center sm:flex">
-					<img
-						class="h-[220px]"
-						src="../assets/img/image.png.png"
-						alt="picture"
-					/>
-				</div>
-			</div>
-
-			<!-- <button @click="fetchData()">Обновить текст</button>
-			<br />
-			<button @click="runCountdownClock()">Начать</button> -->
 
 			<div
-				class="select-none bg-white p-5 rounded-bl-[20px] rounded-br-[20px] shadow-[3px_3px_20px_rgba(50,50,50,0.25)] text-[16px] sm:text-[24px]"
+				class="flex flex-col p-2 border-l-2 border-l-solid border-l-[#e5e7eb] w-[110px] sm:w-1/5"
 			>
-				<span
-					v-for="(symbol, index) in fetchedTextАrray"
-					:key="index"
-					class="text-black"
-					:class="{
-						'fetched-text--correct': symbol.state === 'correct',
-						'fetched-text--wrong': symbol.state === 'wrong',
-					}"
-				>
-					{{ symbol.letter }}
-				</span>
-			</div>
-
-			<!-- <p>Переменная typedText {{ typedText }}</p>
-			<p>Переменная correctLetterByInput {{ correctLetterByInput }}</p>
-			<p>Переменная mistakesByInput {{ mistakesByInput }}</p> -->
-
-			<div
-				class="bg-white p-5 rounded-[20px] shadow-[3px_3px_20px_rgba(50,50,50,0.25)] flex"
-			>
-				<div class="grow">
-					<textarea
-						class="resize-none outline-none w-full h-full text-[16px] pr-2.5 sm:text-[24px] sm:pr-5 placeholder:text-[#889cb1]"
-						:placeholder="fetchedText"
-						v-model="typedText"
-						name="typedText"
-						@keyup="comparisonInputedText()"
-						@click="runCountdownClock()"
-					/>
-				</div>
-
 				<div
-					class="p-2 border-l-2 border-l-solid border-l-[#e5e7eb] w-[110px] sm:w-1/5"
+					class="basis-1/2 flex justify-center items-center text-[16px] leading-[24px] border-b-2 border-b-solid border-b-[#e5e7eb] pb-2"
 				>
-					<p
-						class="text-[16px] leading-[24px] text-center pb-2 border-b-2 border-b-solid border-b-[#e5e7eb]"
-					>
+					<!-- <p
+					class="basis-1/2 text-center inline-block align-middle text-[16px] leading-[24px] border-b-2 border-b-solid border-b-[#e5e7eb] pb-2"
+				> -->
+					<div>
 						{{ $t("speed.text_1") }}
 						<span
 							v-if="
@@ -325,70 +272,76 @@ const centerDialogVisible = ref(false)
 						>
 							{{
 								(
-									correctLetterByInput /
-									(countDownInSecond - inSecondsDisplay)
+									60 *
+									(correctLetterByInput /
+										(countDownInSecond - inSecondsDisplay))
 								).toFixed(2)
 							}}
 						</span>
 						{{ $t("speed.text_2") }}
-					</p>
-					<p class="text-[16px] leading-[24px] text-center pt-2">
+					</div>
+				</div>
+				<div
+					class="basis-1/2 flex justify-center items-center text-[16px] leading-[24px] pt-2"
+				>
+					<!-- <p class="basis-1/2 text-center text-[16px] leading-[24px] pt-2"> -->
+					<div>
 						{{ $t("time.text_1") }}
 						<span>
 							{{ inSecondsDisplay }}
 						</span>
 						{{ $t("time.text_2") }}
-					</p>
+					</div>
 				</div>
 			</div>
 		</div>
-
-		<el-dialog
-			v-model="centerDialogVisible"
-			title="Результаты"
-			width="70%"
-			align-center
-		>
-			<template #header="{ titleClass }">
-				<div class="my-header">
-					<h2 class="modal__header text-[24px] font-bold" :class="titleClass">
-						{{ $t("results.header") }}
-					</h2>
-				</div>
-			</template>
-
-			<p class="text-[18px] leading-[28px]">
-				{{ $t("results.time_1") }}
-				<span> {{ countDownInSecond - inSecondsDisplay }} </span>
-				{{ $t("results.time_2") }}
-			</p>
-			<p class="text-[18px] leading-[28px]">
-				{{ $t("results.mistakes") }}
-				<span>
-					{{ mistakesByInput }}
-				</span>
-			</p>
-			<p class="text-[18px] leading-[28px]">
-				{{ $t("results.speed_1") }}
-				<span>
-					{{
-						(
-							correctLetterByInput /
-							(countDownInSecond - inSecondsDisplay)
-						).toFixed(2)
-					}}
-				</span>
-				{{ $t("results.speed_2") }}
-			</p>
-			<template #footer>
-				<div class="dialog-footer">
-					<el-button type="primary" @click="restartCountdownClock">
-						{{ $t("results.button") }}
-					</el-button>
-				</div>
-			</template>
-		</el-dialog>
 	</div>
+
+	<el-dialog
+		v-model="centerDialogVisible"
+		title="Результаты"
+		width="70%"
+		align-center
+	>
+		<template #header="{ titleClass }">
+			<div class="my-header">
+				<h2 class="modal__header text-[24px] font-bold" :class="titleClass">
+					{{ $t("results.header") }}
+				</h2>
+			</div>
+		</template>
+
+		<p class="text-[18px] leading-[28px]">
+			{{ $t("results.time_1") }}
+			<span> {{ countDownInSecond - inSecondsDisplay }} </span>
+			{{ $t("results.time_2") }}
+		</p>
+		<p class="text-[18px] leading-[28px]">
+			{{ $t("results.mistakes") }}
+			<span>
+				{{ mistakesByInput }}
+			</span>
+		</p>
+		<p class="text-[18px] leading-[28px]">
+			{{ $t("results.speed_1") }}
+			<span>
+				{{
+					(
+						60 *
+						(correctLetterByInput / (countDownInSecond - inSecondsDisplay))
+					).toFixed(2)
+				}}
+			</span>
+			{{ $t("results.speed_2") }}
+		</p>
+		<template #footer>
+			<div class="dialog-footer">
+				<el-button type="primary" @click="restartCountdownClock">
+					{{ $t("results.button") }}
+				</el-button>
+			</div>
+		</template>
+	</el-dialog>
 </template>
 
 <style scoped>
