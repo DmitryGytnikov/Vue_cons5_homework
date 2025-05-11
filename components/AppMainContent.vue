@@ -90,34 +90,41 @@ const getTextWhenInit = () => {
 }
 getTextWhenInit()
 
-const fetchData = () => {
-	fetch("https://api.api-ninjas.com/v1/quotes", {
-		method: "GET",
-		headers: {
-			"X-Api-Key": "MaJRZbQ2E6XJoWM9vfJa0g==iwIoVBVzxFPkB5c2",
-		},
-	})
-		.then(response => {
-			response.json().then(data => {
-				const resultMidterm1 = [...data[0].quote] // ['h', 'e', 'l', 'l', 'o'] преобразование в массив посимвольно
-				// console.log(resultMidterm1)
+const asyncFetchData = async () => {
+	try {
+		const options = {
+			method: "GET",
+			headers: {
+				"X-Api-Key": "MaJRZbQ2E6XJoWM9vfJa0g==iwIoVBVzxFPkB5c2",
+			},
+		}
 
-				const resultMidterm2 = resultMidterm1.map(function (elem) {
-					return {
-						letter: elem,
-						state: "initial",
-					}
-				}) // преобразование в массив обьектов посимвольно
-				// console.log(resultMidterm2)
+		// throw new Error("ПРОИЗОШЛА ОШИБКА В КОДЕ ПРИ ПОЛУЧЕНИИ ТЕКСТА С БЭКА")
 
-				fetchedTextАrray.value = resultMidterm2
-				fetchedText.value = data[0].quote
-				typedText.value = ""
-			})
-		})
-		.catch(err => {
-			console.error(err)
-		})
+		const rawData = await fetch("https://api.api-ninjas.com/v1/quotes", options)
+
+		const data = await rawData.json()
+		// console.log("data", data)
+
+		const resultMidterm1 = [...data[0].quote] // ['h', 'e', 'l', 'l', 'o'] преобразование в массив посимвольно
+		// console.log(resultMidterm1)
+
+		const resultMidterm2 = resultMidterm1.map(function (elem) {
+			return {
+				letter: elem,
+				state: "initial",
+			}
+		}) // преобразование в массив обьектов посимвольно
+		// console.log(resultMidterm2)
+
+		fetchedTextАrray.value = resultMidterm2
+		fetchedText.value = data[0].quote
+		typedText.value = ""
+	} catch (e) {
+		console.log(e)
+	} finally {
+		// console.log("Я выполнюсь всегда!")
+	}
 }
 
 let inSecondsDisplay = ref(0)
@@ -146,29 +153,24 @@ runCountdownClock = () => {
 
 			// Find the distance between now and the count down date
 			const distance = countDownDate - now
+			const secInMin = 60
 
 			// Time calculations for days, hours, minutes and seconds
 			// const days = Math.floor(distance / (1000 * 60 * 60 * 24))
 			// const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
 			// const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
 			const seconds = Math.floor(
-				(distance % (milisecInSec * 60)) / milisecInSec
+				(distance % (milisecInSec * secInMin)) / milisecInSec
 			)
-			// console.log(seconds)
 
 			// Output the result in an element
 			inSecondsDisplay.value = seconds
-
-			// with id="demo"
-			// document.getElementById("demo").innerHTML =
-			// 	days + "d " + hours + "h " + minutes + "m " + seconds + "s "
 
 			// If the count down is over, write some text
 			if (distance < 0) {
 				clearInterval(timerId)
 				inSecondsDisplay.value = 0
 				centerDialogVisible.value = true
-				// document.getElementById("demo").innerHTML = "EXPIRED"
 			}
 		}, milisecInSec)
 	}
@@ -176,11 +178,9 @@ runCountdownClock = () => {
 
 const restartCountdownClock = () => {
 	typedText.value = ""
-	// mistakesByInput.value = 0
-	// correctLetterByInput.value = 0
 	inSecondsDisplay.value = 0
 
-	fetchData()
+	asyncFetchData()
 
 	centerDialogVisible.value = false
 }
@@ -211,12 +211,8 @@ const comparisonInputedText = () => {
 	for (let i = 0; i < typedText.value.length; i++) {
 		if (fetchedText.value[i] === typedText.value[i]) {
 			fetchedTextАrray.value[i].state = "correct"
-			// console.log("добавлено correct")
-			// console.log(i)
 		} else {
 			fetchedTextАrray.value[i].state = "wrong"
-			// console.log("добавлено wrong")
-			// console.log(i)
 		}
 	}
 
@@ -224,16 +220,7 @@ const comparisonInputedText = () => {
 		fetchedTextАrray.value[i].state = "initial"
 	}
 
-	// correctLetterByInput.value = fetchedTextАrray.value.filter(
-	// 	item => item.state === "correct"
-	// ).length
-
-	// mistakesByInput.value = fetchedTextАrray.value.filter(
-	// 	item => item.state === "wrong"
-	// ).length
-
 	if (typedText.value.length >= fetchedText.value.length) {
-		// console.log("привет")
 		clearInterval(timerId)
 
 		centerDialogVisible.value = true
@@ -244,7 +231,7 @@ const centerDialogVisible = ref(false)
 </script>
 
 <template>
-	<!-- <button @click="fetchData()">Обновить текст</button>
+	<!-- <button @click="asyncFetchData()">Обновить текст</button>
 			<br />
 			<button @click="runCountdownClock()">Начать</button> -->
 	<!-- <p>Переменная typedText {{ typedText }}</p>
@@ -295,7 +282,7 @@ const centerDialogVisible = ref(false)
 					class="basis-1/2 text-center inline-block align-middle text-[16px] leading-[24px] border-b-2 border-b-solid border-b-[#e5e7eb] pb-2"
 				> -->
 					<div class="text-center">
-						{{ $t("speed.text_1") }}
+						{{ $t("speed.speedPrint") }}
 						<span
 							v-if="
 								correctLetterByInput / (countDownInSecond - inSecondsDisplay)
@@ -309,7 +296,7 @@ const centerDialogVisible = ref(false)
 								).toFixed(2)
 							}}
 						</span>
-						{{ $t("speed.text_2") }}
+						{{ $t("speed.signsMin") }}
 					</div>
 				</div>
 				<div
@@ -317,11 +304,11 @@ const centerDialogVisible = ref(false)
 				>
 					<!-- <p class="basis-1/2 text-center text-[16px] leading-[24px] pt-2"> -->
 					<div text-center>
-						{{ $t("time.text_1") }}
+						{{ $t("time.remainingTime") }}
 						<span>
 							{{ inSecondsDisplay }}
 						</span>
-						{{ $t("time.text_2") }}
+						{{ $t("time.sec") }}
 					</div>
 				</div>
 			</div>
@@ -337,15 +324,15 @@ const centerDialogVisible = ref(false)
 		<template #header="{ titleClass }">
 			<div class="my-header">
 				<h2 class="modal__header text-[24px] font-bold" :class="titleClass">
-					{{ $t("results.header") }}
+					{{ $t("results.results") }}
 				</h2>
 			</div>
 		</template>
 
 		<p class="text-[18px] leading-[28px]">
-			{{ $t("results.time_1") }}
+			{{ $t("results.timeSpent") }}
 			<span> {{ countDownInSecond - inSecondsDisplay }} </span>
-			{{ $t("results.time_2") }}
+			{{ $t("results.sec") }}
 		</p>
 		<p class="text-[18px] leading-[28px]">
 			{{ $t("results.mistakes") }}
@@ -354,7 +341,7 @@ const centerDialogVisible = ref(false)
 			</span>
 		</p>
 		<p class="text-[18px] leading-[28px]">
-			{{ $t("results.speed_1") }}
+			{{ $t("results.speedPrint") }}
 			<span>
 				{{
 					(
@@ -363,12 +350,12 @@ const centerDialogVisible = ref(false)
 					).toFixed(2)
 				}}
 			</span>
-			{{ $t("results.speed_2") }}
+			{{ $t("results.signsMin") }}
 		</p>
 		<template #footer>
 			<div class="dialog-footer">
 				<el-button type="primary" @click="restartCountdownClock">
-					{{ $t("results.button") }}
+					{{ $t("results.tryAgain") }}
 				</el-button>
 			</div>
 		</template>

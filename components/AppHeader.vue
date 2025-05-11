@@ -1,5 +1,13 @@
 <script setup>
-const { locales, setLocale } = useI18n()
+const { locales, setLocale, t } = useI18n()
+
+const fetchedTextLength = computed(() => fetchedText.value.length)
+
+const advantagesLabels = computed(() => [
+	{ label: t("advantages.improveSpeedTextPrinting") },
+	{ label: t("advantages.reduceErrors") },
+	{ label: t("advantages.testYourSkill") },
+])
 </script>
 <template>
 	<div class="basis-1/3">
@@ -22,14 +30,12 @@ const { locales, setLocale } = useI18n()
 					{{ $t("header") }}
 				</h1>
 				<ul class="list-image-none">
-					<li class="my-text">
-						{{ $t("advantages.advantage_1") }}
-					</li>
-					<li class="my-text">
-						{{ $t("advantages.advantage_2") }}
-					</li>
-					<li class="my-text">
-						{{ $t("advantages.advantage_3") }}
+					<li
+						class="my-text"
+						v-for="(label, index) in advantagesLabels"
+						:key="index"
+					>
+						{{ label.label }}
 					</li>
 				</ul>
 			</div>
