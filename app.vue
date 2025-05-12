@@ -3,7 +3,6 @@ import "./assets/css/index.css"
 </script>
 
 <template>
-	<!-- <AppSpeedPrint /> -->
 	<div class="h-full">
 		<div
 			class="h-full flex flex-col bg-white max-w-360 mx-auto my-0 px-2.5 sm:px-5"

@@ -134,6 +134,8 @@ let timerId = () => {}
 
 let runCountdownClock = () => {}
 
+const secInMin = 60
+
 runCountdownClock = () => {
 	if (inSecondsDisplay.value < 1) {
 		comparisonInputedText()
@@ -153,7 +155,6 @@ runCountdownClock = () => {
 
 			// Find the distance between now and the count down date
 			const distance = countDownDate - now
-			const secInMin = 60
 
 			// Time calculations for days, hours, minutes and seconds
 			// const days = Math.floor(distance / (1000 * 60 * 60 * 24))
@@ -205,8 +206,6 @@ const correctLetterByInput = computed(() => {
 	}, 0)
 })
 
-const fetchedTextLength = computed(() => fetchedText.value.length)
-
 const comparisonInputedText = () => {
 	for (let i = 0; i < typedText.value.length; i++) {
 		if (fetchedText.value[i] === typedText.value[i]) {
@@ -228,17 +227,21 @@ const comparisonInputedText = () => {
 }
 
 const centerDialogVisible = ref(false)
+
+const fetchedTextLength = computed(() => fetchedText.value.length)
+
+const typedTextLength = computed(() => typedText.value.length)
+
+const timeElapsed = computed(
+	() => countDownInSecond.value - inSecondsDisplay.value
+)
+
+const charsPerMinute = computed(() =>
+	((secInMin * typedTextLength.value) / timeElapsed.value).toFixed(0)
+)
 </script>
 
 <template>
-	<!-- <button @click="asyncFetchData()">Обновить текст</button>
-			<br />
-			<button @click="runCountdownClock()">Начать</button> -->
-	<!-- <p>Переменная typedText {{ typedText }}</p>
-	<p>Переменная correctLetterByInput {{ correctLetterByInput }}</p>
-	<p>Переменная mistakesByInput {{ mistakesByInput }}</p>
-	<p>Переменная inSecondsDisplay {{ inSecondsDisplay }}</p>-->
-
 	<div class="basis-2/3 flex flex-col justify-evenly h-full">
 		<div
 			class="basis-1/4 select-none bg-white p-5 rounded-bl-[20px] rounded-br-[20px] shadow-[3px_3px_20px_rgba(50,50,50,0.25)] text-[16px] sm:text-[24px]"
@@ -269,7 +272,6 @@ const centerDialogVisible = ref(false)
 					@input="comparisonInputedText()"
 					@click="runCountdownClock()"
 				/>
-				<!-- @keyup="comparisonInputedText()" -->
 			</div>
 
 			<div
@@ -278,23 +280,10 @@ const centerDialogVisible = ref(false)
 				<div
 					class="basis-1/2 flex justify-center items-center text-[16px] leading-[24px] border-b-2 border-b-solid border-b-[#e5e7eb] pb-2"
 				>
-					<!-- <p
-					class="basis-1/2 text-center inline-block align-middle text-[16px] leading-[24px] border-b-2 border-b-solid border-b-[#e5e7eb] pb-2"
-				> -->
 					<div class="text-center">
 						{{ $t("speed.speedPrint") }}
-						<span
-							v-if="
-								correctLetterByInput / (countDownInSecond - inSecondsDisplay)
-							"
-						>
-							{{
-								(
-									60 *
-									(correctLetterByInput /
-										(countDownInSecond - inSecondsDisplay))
-								).toFixed(2)
-							}}
+						<span v-if="typedTextLength">
+							{{ charsPerMinute }}
 						</span>
 						{{ $t("speed.signsMin") }}
 					</div>
@@ -302,7 +291,6 @@ const centerDialogVisible = ref(false)
 				<div
 					class="basis-1/2 flex justify-center items-center text-[16px] leading-[24px] pt-2"
 				>
-					<!-- <p class="basis-1/2 text-center text-[16px] leading-[24px] pt-2"> -->
 					<div text-center>
 						{{ $t("time.remainingTime") }}
 						<span>
@@ -331,7 +319,7 @@ const centerDialogVisible = ref(false)
 
 		<p class="text-[18px] leading-[28px]">
 			{{ $t("results.timeSpent") }}
-			<span> {{ countDownInSecond - inSecondsDisplay }} </span>
+			<span> {{ timeElapsed }} </span>
 			{{ $t("results.sec") }}
 		</p>
 		<p class="text-[18px] leading-[28px]">
@@ -343,12 +331,7 @@ const centerDialogVisible = ref(false)
 		<p class="text-[18px] leading-[28px]">
 			{{ $t("results.speedPrint") }}
 			<span>
-				{{
-					(
-						60 *
-						(correctLetterByInput / (countDownInSecond - inSecondsDisplay))
-					).toFixed(2)
-				}}
+				{{ charsPerMinute }}
 			</span>
 			{{ $t("results.signsMin") }}
 		</p>
